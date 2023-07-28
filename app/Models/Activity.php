@@ -23,6 +23,20 @@ class Activity extends Model
         return self::where('activity_type', $type)->get();
     }
 
+    public function getTotalDistanceByType($type)
+    {
+        $activities = self::where('activity_type', $type)->get();
+
+        $totalDistance = 0;
+        foreach ($activities as $activity) {
+            $rate = DistanceUnit::tryFrom($activity->distance_unit)->rate();
+            $totalDistance += $rate * $activity->distance;
+        }
+
+        return $totalDistance;
+    }
+
+
 
     public function storeActivity($data)
     {
