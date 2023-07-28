@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ActivityRequest;
 use App\Models\Activity;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -37,17 +38,9 @@ class ActivityController extends Controller
         return response()->json(['total_time' => $totalTime]);
     }
 
-    public function store(Request $request)
+    public function store(ActivityRequest $request)
     {
-        $validatedData = $request->validate([
-            'activity_type' => 'required|in:running,cycling,walking,swimming,yoga',
-            'activity_date' => 'required|date',
-            'name' => 'required|string',
-            'distance' => 'required|numeric|min:0',
-            'distance_unit' => 'required|in:kilometers,miles,meters',
-            'elapsed_time' => 'required|integer|min:0',
-        ]);
-        $activity = $this->activityModel->storeActivity($validatedData);
+        $activity = $this->activityModel->storeActivity($request->validated());
         return response()->json($activity, Response::HTTP_CREATED);
     }
 }
