@@ -3,44 +3,44 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ActivityRequest;
-use App\Models\Activity;
-use Illuminate\Http\Request;
+use App\Services\ActivityService;
+use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 class ActivityController extends Controller
 {
 
-    public function __construct(private Activity $activityModel)
+    public function __construct(private readonly ActivityService $activityService)
     {
     }
 
-    public function getAllActivities()
+    public function getAllActivities(): JsonResponse
     {
-        $activities = $this->activityModel->getAllActivities();
+        $activities = $this->activityService->getAllActivities();
         return response()->json($activities);
     }
 
-    public function getActivitiesByType($type)
+    public function getActivitiesByType(string $type): jsonResponse
     {
-        $activities = $this->activityModel->getActivitiesByType($type);
+        $activities = $this->activityService->getActivitiesByType($type);
         return response()->json($activities);
     }
 
-    public function getTotalDistanceByType($type)
+    public function getTotalDistanceByType(string $type): jsonResponse
     {
-        $totalDistance = $this->activityModel->getTotalDistanceByType($type);
+        $totalDistance = $this->activityService->getTotalDistanceByType($type);
         return response()->json(['total_distance' => $totalDistance]);
     }
 
-    public function getTotalTimeByType($type)
+    public function getTotalTimeByType(string $type): jsonResponse
     {
-        $totalTime = $this->activityModel->getTotalTimeByType($type);
+        $totalTime = $this->activityService->getTotalTimeByType($type);
         return response()->json(['total_time' => $totalTime]);
     }
 
-    public function store(ActivityRequest $request)
+    public function store(ActivityRequest $request): jsonResponse
     {
-        $activity = $this->activityModel->storeActivity($request->validated());
+        $activity = $this->activityService->storeActivity($request->validated());
         return response()->json($activity, Response::HTTP_CREATED);
     }
 }
