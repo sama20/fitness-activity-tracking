@@ -5,9 +5,9 @@ namespace App\Models\Enums;
 
 enum DistanceUnit: string
 {
-    case Kilometer = 'Kilometer';
-    case Meter = 'Meter';
-    case Mile = 'Mile';
+    case Kilometer = 'kilometer';
+    case Meter = 'meter';
+    case Mile = 'mile';
 
     public function rate(): string
     {
@@ -16,5 +16,10 @@ enum DistanceUnit: string
             self::Kilometer => 1000,
             default => 1,
         };
+    }
+
+    public static function getAllValues(): array
+    {
+        return array_column(self::cases(), 'value');
     }
 }
