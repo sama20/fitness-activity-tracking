@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Database\Factories\ActivityFactory;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -11,6 +12,11 @@ class Activity extends Model
     use HasFactory;
 
     protected $fillable = ['activity_type', 'activity_date', 'name', 'distance', 'distance_unit', 'elapsed_time'];
+
+    protected static function newFactory(): ActivityFactory
+    {
+        return ActivityFactory::new();
+    }
 
     public function getAllActivities(): Collection
     {
