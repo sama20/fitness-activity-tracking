@@ -4,17 +4,14 @@ namespace Tests\Unit;
 
 use App\Models\Activity;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class ActivityTest extends TestCase
 {
-    use DatabaseTransactions;
+    use RefreshDatabase;
     private Activity $activity;
-    private int $totalElapsedTimeRunningBefore = 0;
-    private Collection $allActivitiesBefore ;
-    private Collection $runningActivitiesBefore ;
+
     public function __construct(string $name)
     {
         parent::__construct($name);
@@ -24,10 +21,6 @@ class ActivityTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-
-        $this->totalElapsedTimeRunningBefore = $this->activity->sumElapsedTimeByType('running');
-        $this->allActivitiesBefore = $this->activity->getAllActivities();
-        $this->runningActivitiesBefore = $this->activity->getActivitiesByType('running');
 
         Activity::factory()->create([
             'activity_type' => 'running',
@@ -48,8 +41,9 @@ class ActivityTest extends TestCase
     public function test_it_can_get_all_activities()
     {
         $allActivities = $this->activity->getAllActivities();
+
         $this->assertInstanceOf(\Illuminate\Support\Collection::class, $allActivities);
-        $this->assertEquals(3, count($allActivities)-count($this->allActivitiesBefore));
+        $this->assertCount(3, $allActivities);
     }
 
     public function test_it_can_get_activities_by_type()
@@ -57,18 +51,20 @@ class ActivityTest extends TestCase
         $runningActivities = $this->activity->getActivitiesByType('running');
 
         $this->assertInstanceOf(\Illuminate\Support\Collection::class, $runningActivities);
-        $this->assertEquals(2, count($runningActivities)-count($this->runningActivitiesBefore));
+        $this->assertCount(2, $runningActivities);
     }
 
     public function test_it_can_create_activity(): void
     {
         $this->activity = Activity::factory()->create();
+
         $this->assertInstanceOf(Activity::class, $this->activity);
     }
 
     public function test_it_can_sum_elapsed_time_by_type()
     {
         $totalElapsedTimeRunningAfter = $this->activity->sumElapsedTimeByType('running');
-        $this->assertEquals(2500, $totalElapsedTimeRunningAfter - $this->totalElapsedTimeRunningBefore);
+
+        $this->assertEquals(2500, $totalElapsedTimeRunningAfter);
     }
 }
