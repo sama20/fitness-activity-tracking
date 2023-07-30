@@ -1,6 +1,7 @@
 <?php
 namespace App\Services;
 
+use App\Helpers\Utility;
 use App\Models\Activity;
 use App\Models\Enums\DistanceUnit;
 use Illuminate\Database\Eloquent\Collection;
@@ -27,8 +28,7 @@ class ActivityService
 
         $totalDistance = 0;
         foreach ($activities as $activity) {
-            $rate = DistanceUnit::tryFrom($activity->distance_unit)->rate();
-            $totalDistance += $rate * $activity->distance;
+            $totalDistance = $this->getDistanceByMeter($activity);
         }
 
         return $totalDistance;
@@ -38,15 +38,18 @@ class ActivityService
     {
         $totalTimeInSeconds = $this->activityModel->sumElapsedTimeByType($type);
 
-        $hours = floor($totalTimeInSeconds / 3600);
-        $minutes = floor(($totalTimeInSeconds - ($hours * 3600)) / 60);
-        $seconds = $totalTimeInSeconds - ($hours * 3600) - ($minutes * 60);
-
-        return sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
+        return Utility::secondToDuration($totalTimeInSeconds);
     }
 
     public function storeActivity(array $data): Activity
     {
         return $this->activityModel->storeActivity($data);
+    }
+
+    public function getDistanceByMeter(mixed $activity): int|float
+    {
+        $rate = DistanceUnit::tryFrom($activity->distance_unit)->rate();
+
+        return $rate * $activity->distance;
     }
 }
