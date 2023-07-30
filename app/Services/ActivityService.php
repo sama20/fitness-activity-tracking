@@ -28,7 +28,7 @@ class ActivityService
 
         $totalDistance = 0;
         foreach ($activities as $activity) {
-            $totalDistance = $this->getDistanceByMeter($activity);
+            $totalDistance += $this->getDistanceByMeter($activity);
         }
 
         return $totalDistance;
