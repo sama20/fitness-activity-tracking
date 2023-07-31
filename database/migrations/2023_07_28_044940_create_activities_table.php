@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('activities', function (Blueprint $table) {
             $table->id();
-            $table->enum('activity_type', \App\Models\Enums\ActivityType::getAllValues());
+            $table->enum('activity_type', ['running', 'cycling', 'walking', 'swimming']);
             $table->date('activity_date');
             $table->string('name');
             $table->float('distance');
-            $table->enum('distance_unit', \App\Models\Enums\DistanceUnit::getAllValues());
+            $table->enum('distance_unit', ['kilometer', 'mile', 'meter']);
             $table->integer('elapsed_time'); // in seconds
             $table->timestamps();
         });
