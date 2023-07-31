@@ -1,12 +1,13 @@
 <?php
 namespace App\Services;
 
+use App\Contracts\IService;
 use App\Helpers\Utility;
 use App\Models\Activity;
 use App\Models\Enums\DistanceUnit;
 use Illuminate\Database\Eloquent\Collection;
 
-class ActivityService
+class ActivityService implements IService
 {
     public function __construct(public Activity $activityModel)
     {
@@ -41,8 +42,10 @@ class ActivityService
         return Utility::secondToDuration($totalTimeInSeconds);
     }
 
-    public function storeActivity(array $data): Activity
+    public function storeActivity(ActivityDTO $activityData): Activity
     {
+        $data = $this->transformActivityDataToArray($activityData);
+
         return $this->activityModel->storeActivity($data);
     }
 
@@ -51,5 +54,20 @@ class ActivityService
         $rate = DistanceUnit::tryFrom($activity->distance_unit)->rate();
 
         return $rate * $activity->distance;
+    }
+
+    /** NOTE:
+     * It is good in future to consider an ActivityRepository and move transformActivityDataToArray there.
+     */
+    private function transformActivityDataToArray(ActivityDTO $activityData): array
+    {
+        return [
+            'activity_type' => $activityData->getActivityType(),
+            'activity_date' => $activityData->getActivityDate(),
+            'name' => $activityData->getName(),
+            'distance' => $activityData->getDistance(),
+            'distance_unit' => $activityData->getDistanceUnit(),
+            'elapsed_time' => $activityData->getElapsedTime(),
+        ];
     }
 }
