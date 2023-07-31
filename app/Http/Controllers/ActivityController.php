@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\DataTransferObjects\ActivityDTO;
+use App\Exceptions\ActivityException;
 use App\Http\Requests\ActivityRequest;
+use App\Models\Enums\ActivityType;
 use App\Services\ActivityService;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,21 +29,30 @@ class ActivityController extends Controller
 
     public function getActivitiesByType(string $type): jsonResponse
     {
-        $activities = $this->activityService->getActivitiesByType($type);
+        $activityType = ActivityType::tryFrom($type);
+        ActivityException::validateActivityType($activityType);
+
+        $activities = $this->activityService->getActivitiesByType($activityType);
 
         return response()->json($activities);
     }
 
     public function getTotalDistanceByType(string $type): jsonResponse
     {
-        $totalDistance = $this->activityService->getTotalDistanceByType($type);
+        $activityType = ActivityType::tryFrom($type);
+        ActivityException::validateActivityType($activityType);
+
+        $totalDistance = $this->activityService->getTotalDistanceByType($activityType);
 
         return response()->json(['total_distance' => $totalDistance]);
     }
 
     public function getTotalTimeByType(string $type): jsonResponse
     {
-        $totalTime = $this->activityService->getTotalTimeByType($type);
+        $activityType = ActivityType::tryFrom($type);
+        ActivityException::validateActivityType($activityType);
+
+        $totalTime = $this->activityService->getTotalTimeByType($activityType);
 
         return response()->json(['total_time' => $totalTime]);
     }
@@ -50,6 +61,7 @@ class ActivityController extends Controller
     {
         $activityData = $this->activityDTO->makeActivityDTOFromArray($request->validated());
         $activity = $this->activityService->storeActivity($activityData);
+
         return response()->json($activity, Response::HTTP_CREATED);
     }
 }
