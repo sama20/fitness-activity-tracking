@@ -38,14 +38,14 @@ class ActivityServiceTest extends TestCase
 
     public function test_getTotalDistanceByType_returns_total_distance()
     {
-        $type = ActivityType::Running->value;
+        $type = ActivityType::Running;
         $activities = new Collection([
             (object) ['distance' => 1, 'distance_unit' => DistanceUnit::Kilometer->value],
             (object) ['distance' => 500, 'distance_unit' => DistanceUnit::Meter->value],
         ]);
 
         $this->activityModel->shouldReceive('getActivitiesByType')
-            ->with($type)
+            ->with($type->value)
             ->andReturn($activities);
 
         $totalDistance = $this->activityService->getTotalDistanceByType($type);
@@ -55,11 +55,11 @@ class ActivityServiceTest extends TestCase
 
     public function test_getTotalTimeByType_returns_total_time()
     {
-        $type = ActivityType::Running->value;
+        $type = ActivityType::Running;
         $totalTimeInSeconds = 3600;
 
         $this->activityModel->shouldReceive('sumElapsedTimeByType')
-            ->with($type)
+            ->with($type->value)
             ->andReturn($totalTimeInSeconds);
 
         $totalTime = $this->activityService->getTotalTimeByType($type);

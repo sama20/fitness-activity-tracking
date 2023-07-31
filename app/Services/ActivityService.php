@@ -5,6 +5,7 @@ use App\DataTransferObjects\ActivityDTO;
 use App\Contracts\IService;
 use App\Helpers\Utility;
 use App\Models\Activity;
+use App\Models\Enums\ActivityType;
 use App\Models\Enums\DistanceUnit;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -19,14 +20,14 @@ class ActivityService implements IService
         return $this->activityModel->getAllActivities();
     }
 
-    public function getActivitiesByType(string $type): Collection
+    public function getActivitiesByType(ActivityType $activityType): Collection
     {
-        return $this->activityModel->getActivitiesByType($type);
+        return $this->activityModel->getActivitiesByType($activityType->value);
     }
 
-    public function getTotalDistanceByType(string $type): float|int
+    public function getTotalDistanceByType(ActivityType $activityType): float|int
     {
-        $activities = $this->activityModel->getActivitiesByType($type);
+        $activities = $this->activityModel->getActivitiesByType($activityType->value);
 
         $totalDistance = 0;
         foreach ($activities as $activity) {
@@ -36,9 +37,9 @@ class ActivityService implements IService
         return $totalDistance;
     }
 
-    public function getTotalTimeByType(string $type): string
+    public function getTotalTimeByType(ActivityType $activityType): string
     {
-        $totalTimeInSeconds = $this->activityModel->sumElapsedTimeByType($type);
+        $totalTimeInSeconds = $this->activityModel->sumElapsedTimeByType($activityType->value);
 
         return Utility::secondToDuration($totalTimeInSeconds);
     }
@@ -52,13 +53,13 @@ class ActivityService implements IService
 
     public function getDistanceByMeter(mixed $activity): int|float
     {
-        $rate = DistanceUnit::tryFrom($activity->distance_unit)->rate();
+        $rate = DistanceUnit::tryFrom($activity->distance_unit)?->rate();
 
         return $rate * $activity->distance;
     }
 
-    /** NOTE:
-     * It is good in future to consider an ActivityRepository and move transformActivityDataToArray there.
+    /*
+     * NOTE: It's good in future to consider an ActivityRepository and move transformActivityDataToArray there.
      */
     private function transformActivityDataToArray(ActivityDTO $activityData): array
     {
