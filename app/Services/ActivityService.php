@@ -1,6 +1,7 @@
 <?php
 namespace App\Services;
 
+use App\DataTransferObjects\ActivityDTO;
 use App\Contracts\IService;
 use App\Helpers\Utility;
 use App\Models\Activity;
