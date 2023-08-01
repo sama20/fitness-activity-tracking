@@ -44,7 +44,7 @@ class ActivityController extends Controller
 
         $totalDistance = $this->activityService->getTotalDistanceByType($activityType);
 
-        return response()->json(['total_distance' => $totalDistance]);
+        return response()->json(['total_distance_in_meter' => (int)$totalDistance]);
     }
 
     public function getTotalTimeByType(string $type): jsonResponse
