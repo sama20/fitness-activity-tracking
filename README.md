@@ -40,7 +40,7 @@ However, in respect of the assignment, I followed the initial approach.
 
 **DocBlocks:** I did not extensively use DocBlocks due to the power of type declaration in PHP. DocBlocks are not necessary in such cases.
 
-**Tests:** There are 9 tests that include both unit tests and feature tests, covering all the functionality.
+**Tests:** There are 8 tests that include both unit tests and feature tests, covering all the functionality.
 
 **Function Description:** I have tried to take a comprehensive approach in this small project and have paid attention to important factors in software development such as extensibility, maintainability, modularity, etc. 
 For example, this approach ensures that future development on this project will be of higher quality and based on software standards.

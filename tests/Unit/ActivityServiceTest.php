@@ -30,7 +30,7 @@ class ActivityServiceTest extends TestCase
         Mockery::close();
     }
 
-    /** TODO:
+    /* NOTE:
      * I ignore the below methods for testing. because they just call the Model that I tested them in ActivityTest.
      * If in the future added some logic to the service you should make their tests.
      * getAllActivities    getActivitiesByType     storeActivity
