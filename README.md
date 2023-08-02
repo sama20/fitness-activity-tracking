@@ -1,66 +1,73 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+
+<h1 align="center"> Fitness Activity Tracking Application </h1>
 
 <p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+<img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status">
 </p>
 
-## About Laravel
+## Usage
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### Installation
+* Clone the repository
+* Add the `.env` file from `.env.example`
+* Change the database configuration in the `.env` file
+* Run the `composer install` command
+* Run the `php artisan test` command (for testing and migration) or `php artisan migrate` (only migration)
+* (optional) Run the `php artisan db:seed --class=ActivitySeeder` command
+* Configure a web server with `Apache` or `Nginx` or run `php artisan serve`
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Calling the Routes
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+There is a JSON file to import into **Postman** and call the routes below:
 
-## Learning Laravel
+[Postman_Collection](./public/Fitness%20Activity%20Tracker%20API.postman_collection.json).
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Implementation Facts and Details
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+**Table Design:** First, I want to say that I do not agree with declaring fields like `distance` and `distance_unit` separately. 
+In this implementation, we create a dependency between the two fields and it also violates consistency within the `distance` field. 
+At one time, there is data in meters and at another time, there is data in kilometers in the same field. 
+A better approach would be to remove `distance_unit` from the table and keep `distance` in a unified unit like meters, and handle unit conversion only during reading and creation.
+However, in respect of the assignment, I followed the initial approach.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+**Requested Functions:** There was no request for adding CRUD functionality for activities, but I added a `store` method to showcase my skills in handling user requests.
 
-## Laravel Sponsors
+**Framework:** This project uses the latest versions of the Laravel framework (v10) and the PHP language (v8.2).
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+**PHP Features:** I have utilized the latest PHP features such as Enumeration, Readonly, Nullsafe operator, Constructor Property Promotion, Union Types, and more.
 
-### Premium Partners
+**Error Handling:** For error handling, I believe it is better to handle errors in specific scenarios where it is necessary, such as working with I/O or making API calls. In other situations, it is better to handle logical errors with code, for example, when a requested data does not exist. For this project, I have added appropriate exception throwing for invalid user input.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+**DocBlocks:** I did not extensively use DocBlocks due to the power of type declaration in PHP. DocBlocks are not necessary in such cases.
 
-## Contributing
+**Tests:** There are 9 tests that include both unit tests and feature tests, covering all the functionality.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+**Function Description:** I have tried to take a comprehensive approach in this small project and have paid attention to important factors in software development such as extensibility, maintainability, modularity, etc. 
+For example, this approach ensures that future development on this project will be of higher quality and based on software standards.
 
-## Code of Conduct
+| Folders/Files                 | Description                                                                                                     |
+|-------------------------------|-----------------------------------------------------------------------------------------------------------------|
+| ActivityRequest               | Use this file to handle requests before sending them to the controller                                          |
+| AbstractDTO  ActivityDTO      | Use this file to create an appropriate object for a request and send it to the request with this approach. This allows for better request management in the service layer |
+| IDataTransferObject  IService | These are empty interfaces for possible future use                                                              |
+| ActivityService               | The services layer is the best place to implement the main logic of the project. It helps maintain Single Responsibility for models and controllers                       |
+| ActivityException             | Custom exception class for handling activity-related exceptions                                                 |
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Other files and classes such as Migration, Seeder, Model, and Controller are based on Laravel documentation and are self-explanatory.
 
-## Security Vulnerabilities
+## What Did I Learn?
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+With this small project, I made an effort to focus on designing an extensive and modular system, and I believe I have improved in this area compared to my past projects. Additionally, in the past, I had only read about using `Mocks`, but during this project, I had the opportunity to apply them in practice.
 
-## License
+## Future Works
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+* Complete CRUD functions
+* Add a frontend project to consume this API
+* Add `repository` or `resource` files
+* Add a `user` section
+* Consider adding another database connection for testing purposes if the project is used in a real-world scenario
+
+## Contact
+
+I'm open to receiving any feedback about the project:
+[Asghari.moha@gmail.com](mailto:Asghari.moha@gmail.com)

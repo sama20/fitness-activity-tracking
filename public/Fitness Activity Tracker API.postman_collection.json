@@ -1,0 +1,120 @@
+{
+	"info": {
+		"_postman_id": "fcfe9df0-ef72-4f46-8c8c-60a3c4eed127",
+		"name": "Fitness Activity Tracker API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "311261"
+	},
+	"item": [
+		{
+			"name": "Get All Activities",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/activities",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"activities"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Activities By Type",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/activities",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"activities"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Total time By Type",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/activities/{{type}}/total-time",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"activities",
+						"{{type}}",
+						"total-time"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Total Distance By Type",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/activities/{{type}}/total-distance",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"activities",
+						"{{type}}",
+						"total-distance"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Activity",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"activity_type\": \"walking\",\n    \"activity_date\": \"2023-07-31\",\n    \"name\": \"Moha First Activity\",\n    \"distance\": 10.5,\n    \"distance_unit\": \"kilometer\",\n    \"elapsed_time\": 3000\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/activities",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"activities"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8000",
+			"type": "string"
+		}
+	]
+}
